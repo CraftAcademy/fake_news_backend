@@ -8,6 +8,7 @@ gem 'pg', '>= 0.18', '< 2.0'
 gem 'puma', '~> 3.11'
 gem 'active_model_serializers', '~> 0.10.2'
 gem 'bootsnap', '>= 1.4.2', require: false
+gem 'rack-cors', require: 'rack/cors'
 
 group :development, :test do
   gem 'pry-rails'

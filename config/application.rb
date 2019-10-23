@@ -24,7 +24,16 @@ module FakeNewsApi
       generate.routing_specs false
       generate.controller_specs false
     end
-    
+    config.middleware.insert_before 0, Rack::Cors do
+      allow do
+        origins '*'
+        resource '*', 
+          headers: :any, 
+          methods: %i[get post put delete],
+          expose: %w(access-token expiry token-type uid client),
+          max_age: 0
+      end
+    end
     config.load_defaults 6.0
     config.api_only = true
   end
