@@ -1,3 +1,5 @@
 Rails.application.routes.draw do
-  get 'article/index'
+    namespace :v1, defaults: { format: :json } do 
+      resources :article, only: [:index]
+  end
 end
