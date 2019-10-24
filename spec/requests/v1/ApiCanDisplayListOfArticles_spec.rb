@@ -7,6 +7,6 @@ RSpec.describe 'Get ./requests/v1 ' do
   get '/v1/article'
 
   json_resp = JSON.parse(response.body)
-  expect(json_reps['articles'].count).to eq 2
+  expect(json_resp['articles'].count).to eq 2
   end
 end
