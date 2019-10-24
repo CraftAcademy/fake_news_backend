@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe 'GET articles index' do 
-  let!(:articles) {2.times { FactoryBot.create(:article)}}
+  let!(:articles) {2.times { create(:article)}}
   
   describe 'lists a collection of articles' do 
     before do
@@ -25,11 +25,6 @@ RSpec.describe 'GET articles index' do
           "content"=>"ContentText"
         }
       ]
-
-      
-      binding.pry
-      
-
       expect(response_json).to eq expected_response
     end
   end
