@@ -22,7 +22,7 @@ RSpec.describe 'POST articles create' do
     end
 
     it 'that has image attached' do
-      article = Article.find_by(title: response.request.params['title'])
+      article = Article.find_by(title: response.request.params['title'])      
       expect(article.image.attached?).to eq true
     end
   end

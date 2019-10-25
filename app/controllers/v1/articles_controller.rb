@@ -10,10 +10,11 @@ class V1::ArticlesController < ApplicationController
 
   def create
     article = Article.create(article_params)
-    if article.persisted?
+    attach_image
+    if @article.persisted?
       render json: {message: 'Article was successfully created'}
     else
-      render_error_message(article.errors.first.to_sentence, 400)
+      render_error_message(@article.errors.first.to_sentence, 400)
     end
   end
 
@@ -25,6 +26,12 @@ class V1::ArticlesController < ApplicationController
 
   def article_params
     params.permit(:title, :content, keys: [:image])
+  end
+
+  def attach_image
+    if params['image'] && params['image'].present?
+      DecodeService.attach_image(params['image'], @article.image)
+    end
   end
 
 end
