@@ -9,7 +9,7 @@ class V1::ArticlesController < ApplicationController
   end
 
   def create
-    article = Article.create(article_params)
+    @article = Article.create(article_params)    
     attach_image
     if @article.persisted?
       render json: {message: 'Article was successfully created'}
