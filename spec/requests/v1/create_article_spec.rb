@@ -3,7 +3,7 @@ RSpec.describe 'POST articles create' do
     let(:headers) { { HTTP_ACCEPT: "application/json" } }
 
     before do
-      post 'v1/articles', 
+      post '/v1/articles', 
       params: {
         title: 'New iPhone on the way',
         content: 'A lot of new features coming',

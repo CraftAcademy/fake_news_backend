@@ -8,6 +8,10 @@ class V1::ArticlesController < ApplicationController
     end
   end
 
+  def create
+    
+  end
+
   private
   
   def render_error_message(message, status) 
