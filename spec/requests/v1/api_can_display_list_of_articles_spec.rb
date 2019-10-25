@@ -1,6 +1,7 @@
 RSpec.describe 'GET articles index' do 
   describe 'lists a collection of articles' do 
     let!(:articles) { 2.times { create(:article) } }
+
     before do
       get '/v1/articles'
     end
@@ -26,14 +27,17 @@ RSpec.describe 'GET articles index' do
     end
   end
   
-  describe 'lists a collection of articles' do 
-    let!(:articles) { create(:article, title: nil, content: "sup") } 
+  describe 'returns error if there\'s no articles in the database' do 
     before do
       get '/v1/articles'
     end
 
-    it "gives an error if no title is given" do
-      expect(response.status).to eq 400
+    it 'returns error status' do
+      expect(response.status).to eq 404
+    end
+
+    it 'returns error message' do
+      expect(response_json["error_message"]).to eq "There are no articles here"
     end
   end
 end
