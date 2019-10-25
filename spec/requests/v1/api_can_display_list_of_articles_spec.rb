@@ -1,9 +1,6 @@
-require 'rails_helper'
-
 RSpec.describe 'GET articles index' do 
-  let!(:articles) {2.times { create(:article)}}
-  
   describe 'lists a collection of articles' do 
+    let!(:articles) { 2.times { create(:article) } }
     before do
       get '/v1/articles'
     end
@@ -26,6 +23,17 @@ RSpec.describe 'GET articles index' do
         }
       ]
       expect(response_json).to eq expected_response
+    end
+  end
+  
+  describe 'lists a collection of articles' do 
+    let!(:articles) { create(:article, title: nil, content: "sup") } 
+    before do
+      get '/v1/articles'
+    end
+
+    it "gives an error if no title is given" do
+      expect(response.status).to eq 400
     end
   end
 end
