@@ -9,7 +9,12 @@ class V1::ArticlesController < ApplicationController
   end
 
   def create
-    
+    article = Article.create(article_params)
+    if article.persisted?
+      render json: {message: 'Article was successfully created'}
+    else
+      render_error_message(article.errors.first.to_sentence, 400)
+    end
   end
 
   private
@@ -17,4 +22,9 @@ class V1::ArticlesController < ApplicationController
   def render_error_message(message, status) 
     render json: { error_message: message }, status: status
   end
+
+  def article_params
+    params.permit(:title, :content, keys: [:image])
+  end
+
 end
