@@ -1,21 +1,28 @@
 RSpec.describe 'User Registration', type: :request do
   let(:headers) { { HTTP_ACCEPT: 'application/json' } }
 
-  context 'with valid credentials' do
-    it 'returns a user and token' do
+  describe 'with valid credentials' do
+
+    before do 
       post '/v1/auth', 
         params: { email: 'johndoe@mail.se',
                 password: 'password',
                 password_confirmation: 'password'
               }, 
               headers: headers
+    end
 
+    it 'returns a user and token' do
       expect(response_json['status']).to eq 'success'
+    end
+
+    it 'returns an affirmative response' do
       expect(response.status).to eq 200
     end
+
   end
 
-  context 'returns an error message when user submits' do
+  describe 'returns an error message when user submits' do
     it 'non-matching password confirmation' do
       post '/v1/auth',
         params: { email: 'johndoe@mail.se',
