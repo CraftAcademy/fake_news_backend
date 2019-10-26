@@ -22,46 +22,68 @@ RSpec.describe 'User Registration', type: :request do
 
   end
 
-  describe 'returns an error message when user submits' do
-    it 'non-matching password confirmation' do
+  describe 'with invalid password' do
+
+    before do
       post '/v1/auth',
         params: { email: 'johndoe@mail.se',
                   password: 'password',
                   password_confirmation: 'wrong_password'
                 },
                 headers: headers
-
-      expect(response_json['errors']['password_confirmation']).to eq ["doesn't match Password"]
-      expect(response.status).to eq 422
     end
 
-    it 'an invalid email address' do
+    it 'returns error message' do
+      expect(response_json['errors']['password_confirmation']).to eq ["doesn't match Password"]
+    end
+
+    it 'return error status' do
+      expect(response.status).to eq 422
+    end
+  end
+
+  describe 'with invalid email' do
+
+    before do
       post '/v1/auth',
         params: { email: 'example@craft',
                   password: 'password',
                   password_confirmation: 'password'
                 },
                 headers: headers
+      end
 
-      expect(response_json['errors']['email']).to eq ['is not an email']
-      expect(response.status).to eq 422
-    end
+      it 'returns error message' do
+        expect(response_json['errors']['email']).to eq ['is not an email']
+      end
 
-    it 'an already registered email' do
-      FactoryBot.create(:user, 
-                         email: 'johndoe@mail.se',
-                         password: 'password',
-                         password_confirmation: 'password')
+      it 'returns error status' do
+        expect(response.status).to eq 422
+      end
+  end
 
+  describe 'an already registered email' do
+    FactoryBot.create(:user, 
+                        email: 'johndoe@mail.se',
+                        password: 'password',
+                        password_confirmation: 'password')
+  
+    before do
       post '/v1/auth',
         params: { email: 'johndoe@mail.se',
                   password: 'password',
                   password_confirmation: 'password'
                 },
                 headers: headers
+      end
 
-      expect(response_json['errors']['email']).to eq ['has already been taken']
-      expect(response.status).to eq 422
+      it 'returns error message' do
+        expect(response_json['errors']['email']).to eq ['has already been taken']
+      end
+
+      it 'returns and error status' do
+        expect(response.status).to eq 422
+      end
     end
   end
 end
