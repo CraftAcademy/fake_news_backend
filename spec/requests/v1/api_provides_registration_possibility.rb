@@ -5,11 +5,12 @@ RSpec.describe 'User Registration', type: :request do
 
     before do 
       post '/v1/auth', 
-        params: { email: 'johndoe@mail.se',
+        params: { 
+                email: 'johndoe@mail.se',
                 password: 'password',
                 password_confirmation: 'password'
-              }, 
-              headers: headers
+        }, 
+        headers: headers
     end
 
     it 'returns a user and token' do
@@ -22,15 +23,15 @@ RSpec.describe 'User Registration', type: :request do
 
   end
 
-  describe 'with invalid password' do
+  describe 'a non-matching password confirmation' do
 
     before do
       post '/v1/auth',
         params: { email: 'johndoe@mail.se',
                   password: 'password',
                   password_confirmation: 'wrong_password'
-                },
-                headers: headers
+        },
+        headers: headers
     end
 
     it 'returns error message' do
@@ -42,15 +43,15 @@ RSpec.describe 'User Registration', type: :request do
     end
   end
 
-  describe 'with invalid email' do
+  describe 'submits an invalid email adress' do
 
     before do
       post '/v1/auth',
-        params: { email: 'example@craft',
+        params: { email: 'johndoe@mail',
                   password: 'password',
                   password_confirmation: 'password'
-                },
-                headers: headers
+        },
+        headers: headers
       end
 
       it 'returns error message' do
@@ -62,26 +63,22 @@ RSpec.describe 'User Registration', type: :request do
       end
   end
 
-  describe 'an already registered email' do
-    FactoryBot.create(:user, 
-                        email: 'johndoe@mail.se',
-                        password: 'password',
-                        password_confirmation: 'password')
-  
+  describe 'submits an already registered email' do
+    create(:user)
     before do
       post '/v1/auth',
-        params: { email: 'johndoe@mail.se',
+        params: { email: 'user@random.com',
                   password: 'password',
                   password_confirmation: 'password'
-                },
-                headers: headers
+        },
+        headers: headers
       end
 
       it 'returns error message' do
         expect(response_json['errors']['email']).to eq ['has already been taken']
       end
 
-      it 'returns and error status' do
+      it 'returns error status' do
         expect(response.status).to eq 422
       end
     end
