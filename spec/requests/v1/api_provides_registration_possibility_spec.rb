@@ -64,6 +64,7 @@ RSpec.describe 'User Registration', type: :request do
   end
 
   describe 'submits an already registered email' do
+    
     before do
       create(:user, 
              email: 'johndoe@mail.se',
