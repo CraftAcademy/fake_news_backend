@@ -52,7 +52,7 @@ RSpec.describe 'User Registration', type: :request do
                   password_confirmation: 'password'
         },
         headers: headers
-      end
+    end
 
       it 'returns error message' do
         expect(response_json['errors']['email']).to eq ['is not an email']
@@ -64,23 +64,26 @@ RSpec.describe 'User Registration', type: :request do
   end
 
   describe 'submits an already registered email' do
-    create(:user)
     before do
-      post '/v1/auth',
-        params: { email: 'user@random.com',
-                  password: 'password',
-                  password_confirmation: 'password'
-        },
-        headers: headers
-      end
+      create(:user, 
+             email: 'johndoe@mail.se',
+             password: 'password',
+             password_confirmation: 'password')
+    
+      post '/v1/auth', 
+      params: { email: 'johndoe@mail.se',
+                password: 'password',
+                password_confirmation: 'password'
+              }, 
+              headers: headers
+    end
 
       it 'returns error message' do
         expect(response_json['errors']['email']).to eq ['has already been taken']
       end
 
-      it 'returns error status' do
+      it 'it returns error status' do
         expect(response.status).to eq 422
       end
-    end
   end
 end
