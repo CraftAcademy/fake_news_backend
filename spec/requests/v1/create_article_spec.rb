@@ -7,12 +7,12 @@ RSpec.describe 'POST articles create' do
       params: {
         title: 'New iPhone on the way',
         content: 'A lot of new features coming',
-        image: {
+        image: [{
           type: 'application/jpg',
           encoder: 'name=new_iphone.jpg;base64',
           data: 'iVBORw0KGgoAAAANSUhEUgAABjAAAAOmCAYAAABFYNwHAAAgAElEQVR4XuzdB3gU1cLG8Te9EEgISQi9I71KFbBXbFixN6zfvSiIjSuKInoVFOyIDcWuiKiIol4Q6SBVOtI7IYSWBkm',
           extension: 'jpg'
-        }
+        }]
       },
       headers: headers
     end
@@ -22,10 +22,14 @@ RSpec.describe 'POST articles create' do
     end
 
     it 'that has image attached' do
-      binding.pry
       article = Article.find_by(title: response.request.params['title'])      
       expect(article.image.attached?).to eq true
     end
+
+    it "returns success message" do
+      expect(response_json['message']).to eq 'Article was successfully created'
+    end
+    
 
   end
 end

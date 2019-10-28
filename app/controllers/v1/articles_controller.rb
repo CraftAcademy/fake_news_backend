@@ -10,14 +10,8 @@ class V1::ArticlesController < ApplicationController
 
   def create
     @article = Article.create(article_params) 
-    
-    binding.pry
-    
     attach_image
     if @article.persisted? && @article.image.attached?
-      
-      binding.pry
-      
       render json: {message: 'Article was successfully created'}
     else
       render_error_message(@article.errors.first.to_sentence, 400)
@@ -35,9 +29,6 @@ class V1::ArticlesController < ApplicationController
   end
 
   def attach_image
-    
-    binding.pry
-    
     if params['image'] && params['image'].present?
       DecodeService.attach_image(params['image'].first, @article.image)
     end
