@@ -1,6 +1,6 @@
 RSpec.describe 'Can create article with attributes' do
 
-  describe "user can post article successfully" do
+  describe "can post article successfully" do
     let(:headers) { {HTTP_ACCEPT:"application/json"} }
 
     before do
@@ -24,6 +24,34 @@ RSpec.describe 'Can create article with attributes' do
     it "that has an image attached" do
       article = Article.find_by(title: response.request.params['title'])
       expect(article.image.attached?).to eq true  
+    end
+  end
+
+  describe "cannot post article successfully" do
+    let(:headers) { {HTTP_ACCEPT:"application/json"} }
+
+    before do
+      post '/v1/articles', params: {
+        title: "Wh",
+        content: "Oh it is all of them!",
+        image: {
+          type: 'application/jpg',
+          encoder: 'name=new_iphone.jpg;base64',
+          data: 'iVBORw0KGgoAAAANSUhEUgAABjAAAAOmCAYAAABFYNwHAAAgAElEQVR4XuzdB3gU1cLG8Te9EEgISQi9I71KFbBXbFixN6zfvSiIjSuKInoVFOyIDcWuiKiIol4Q6SBVOtI7IYSWBkm',
+          extension: 'jpg'
+        }
+      },
+      headers: headers
+    end
+
+    it "returns an error status when title is incomplete" do
+      article = Article.find_by(title: response.request.params['title'])
+      expect(response.status).to eq 400
+    end
+
+    it "returns an error message when title is incomplete" do
+      article = Article.find_by(title: response.request.params['title'])
+      expect(response_json['error_message']).to eq 'title and is too short (minimum is 3 characters)'
     end
   end
 end
