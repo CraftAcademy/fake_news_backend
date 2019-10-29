@@ -27,13 +27,13 @@ RSpec.describe 'Can create article with attributes' do
     end
   end
 
-  describe "cannot post article successfully with incomplete title" do
+  describe "cannot post article successfully with incomplete information" do
     let(:headers) { {HTTP_ACCEPT:"application/json"} }
 
     before do
       post '/v1/articles', params: {
         title: "Wh",
-        content: "Oh my apple pie how everything is awesome!",
+        content: "Oh",
         image: {
           type: 'application/jpg',
           encoder: 'name=new_iphone.jpg;base64',
@@ -44,42 +44,14 @@ RSpec.describe 'Can create article with attributes' do
       headers: headers
     end
 
-    it "returns an error status when title is incomplete" do
+    it "returns an error status when title and content is incomplete" do
       article = Article.find_by(title: response.request.params['title'])
       expect(response.status).to eq 400
     end
 
-    it "returns an error message when title is incomplete" do
+    it "returns an error message when title and content is incomplete" do
       article = Article.find_by(title: response.request.params['title'])
-      expect(response_json['error_message']).to eq 'title and is too short (minimum is 3 characters)'
-    end
-  end
-
-  describe "cannot post article successfully with incomplete content" do
-    let(:headers) { {HTTP_ACCEPT:"application/json"} }
-
-    before do
-      post '/v1/articles', params: {
-        title: "Oh my apple pie how everything is awesome!",
-        content: "Wh",
-        image: {
-          type: 'application/jpg',
-          encoder: 'name=new_iphone.jpg;base64',
-          data: 'iVBORw0KGgoAAAANSUhEUgAABjAAAAOmCAYAAABFYNwHAAAgAElEQVR4XuzdB3gU1cLG8Te9EEgISQi9I71KFbBXbFixN6zfvSiIjSuKInoVFOyIDcWuiKiIol4Q6SBVOtI7IYSWBkm',
-          extension: 'jpg'
-        }
-      },
-      headers: headers
-    end
-
-    it "returns an error status when title is incomplete" do
-      article = Article.find_by(content: response.request.params['content'])
-      expect(response.status).to eq 400
-    end
-
-    it "returns an error message when title is incomplete" do
-      article = Article.find_by(content: response.request.params['content'])
-      expect(response_json['error_message']).to eq 'content and is too short (minimum is 10 characters)'
+      expect(response_json['error_message']).to eq 'Title is too short (minimum is 3 characters) and Content is too short (minimum is 10 characters)'
     end
   end
 end

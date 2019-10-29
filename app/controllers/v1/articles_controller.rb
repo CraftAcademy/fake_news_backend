@@ -14,7 +14,7 @@ class V1::ArticlesController < ApplicationController
     if @article.persisted? && @article.image.attached?
       render json: { message: 'Article was successfully created' }
     else
-      render_error_message(@article.errors.first.to_sentence, 400)
+      render_error_message(@article.errors.full_messages.to_sentence, 400)
     end
   end
 
