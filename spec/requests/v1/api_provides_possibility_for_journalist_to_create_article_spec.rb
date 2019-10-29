@@ -33,7 +33,7 @@ RSpec.describe 'Can create article with attributes' do
     before do
       post '/v1/articles', params: {
         title: "Wh",
-        content: "Oh it is all of them!",
+        content: "Oh",
         image: {
           type: 'application/jpg',
           encoder: 'name=new_iphone.jpg;base64',
@@ -52,6 +52,16 @@ RSpec.describe 'Can create article with attributes' do
     it "returns an error message when title is incomplete" do
       article = Article.find_by(title: response.request.params['title'])
       expect(response_json['error_message']).to eq 'title and is too short (minimum is 3 characters)'
+    end
+
+    it 'returns en error status when content is to short' do
+      article = Article.find_by(content: response.request.params['content'])
+      expect(response.status).to eq 400 
+    end
+
+    it 'returns en error message when content is to short' do
+      article = Article.find_by(content: response.request.params['content'])
+      expect(response_json['error_message']).to eq 'content and is too short (minimum is 10 characters)'
     end
   end
 end
