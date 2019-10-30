@@ -8,6 +8,14 @@ class V1::ArticlesController < ApplicationController
     end
   end
 
+  def show
+    if @article = Article.find(params[:id])
+      render json: @article, serializer: Articles::IndexSerializer
+    else
+      render_error_message("The article couldn't be found", 404)
+    end
+  end
+
   def create
     @article = Article.create(article_params)
     attach_image
