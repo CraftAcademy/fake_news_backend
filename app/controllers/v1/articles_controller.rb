@@ -21,12 +21,12 @@ class V1::ArticlesController < ApplicationController
   private
 
   def article_params
-    params.permit([:title, :content, keys: [:image]])
+    params.permit(:title, :content, keys: [:image])
   end
 
   def attach_image
     if params['image'] && params['image'].present?
-      DecodeService.attach_image(params['image'], @article.image)
+      DecodeService.attach_image(params['image'].first, @article.image)
     end
   end
   
