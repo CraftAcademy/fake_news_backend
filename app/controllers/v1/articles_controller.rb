@@ -26,7 +26,7 @@ class V1::ArticlesController < ApplicationController
 
   def attach_image
     if params['image'] && params['image'].present?
-      DecodeService.attach_image(params['image'].first, @article.image)
+      DecodeService.attach_image(params['image'], @article.image)
     end
   end
   
