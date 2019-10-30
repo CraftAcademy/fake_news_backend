@@ -7,12 +7,12 @@ RSpec.describe 'Can create article with attributes' do
       post '/v1/articles', params: {
         title: "Which drugs can kill you?",
         content: "Oh it is all of them!",
-        image: {
+        image: [{
           type: 'application/jpg',
           encoder: 'name=new_iphone.jpg;base64',
           data: 'iVBORw0KGgoAAAANSUhEUgAABjAAAAOmCAYAAABFYNwHAAAgAElEQVR4XuzdB3gU1cLG8Te9EEgISQi9I71KFbBXbFixN6zfvSiIjSuKInoVFOyIDcWuiKiIol4Q6SBVOtI7IYSWBkm',
           extension: 'jpg'
-        }
+        }]
       },
       headers: headers
     end
@@ -34,12 +34,12 @@ RSpec.describe 'Can create article with attributes' do
       post '/v1/articles', params: {
         title: "Wh",
         content: "Oh",
-        image: {
+        image: [{
           type: 'application/jpg',
           encoder: 'name=new_iphone.jpg;base64',
           data: 'iVBORw0KGgoAAAANSUhEUgAABjAAAAOmCAYAAABFYNwHAAAgAElEQVR4XuzdB3gU1cLG8Te9EEgISQi9I71KFbBXbFixN6zfvSiIjSuKInoVFOyIDcWuiKiIol4Q6SBVOtI7IYSWBkm',
           extension: 'jpg'
-        }
+        }]
       },
       headers: headers
     end
