@@ -19,4 +19,19 @@ RSpec.describe 'Return the content of a specific article' do
       expect(response_json).to eq expected_response      
     end
   end
+
+  describe 'return error' do
+    let!(:article) {create(:article)}
+    let(:headers) { { HTTP_ACCEPT: 'application/json' } }
+
+    before do
+      get "/v1/articles/1"
+    end
+
+    it 'returns error' do
+      expect(response.status).to eq 404
+      expect(response_json["error_message"]).to eq "The article couldn't be found"
+    end
+  end
+
 end
