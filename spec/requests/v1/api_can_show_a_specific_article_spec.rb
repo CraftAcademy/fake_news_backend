@@ -16,7 +16,25 @@ RSpec.describe 'Return the content of a specific article' do
           "content"=>"ContentText"
         }
            
-      expect(response_json).to eq expected_response      
+      expect(response_json).to eq expected_response
+        
     end
+  end
+
+  describe 'Returns correct error when article could not be found' do
+    before do
+      get "/v1/articles/12345"
+    end
+
+    it 'returns error status' do
+      expected_response = {}
+      #binding.pry
+      expect(response.status).to eq 404
+    end
+
+    it 'returns error message' do
+      expect(response_json["error_message"]).to eq "The article couldn't be found"
+    end
+
   end
 end
