@@ -8,23 +8,13 @@ class V1::ArticlesController < ApplicationController
     end
   end
 
-  # def show
-  #   if @article = Article.find(params[:id])
-  #     render json: @article, serializer: Articles::IndexSerializer
-  #   else
-  #     render_error_message("The article couldn't be found", 404)
-  #   end
-  # end
-
   def show
     
     if Article.exists?(id: params[:id])
       @article = Article.find(params[:id])
-    end
-    if @article.nil?
-      render_error_message("The article couldn't be found", 404)
-    else
       render json: @article, serializer: Articles::IndexSerializer
+    else
+      render_error_message("The article couldn't be found", 404)
     end
   end
 
