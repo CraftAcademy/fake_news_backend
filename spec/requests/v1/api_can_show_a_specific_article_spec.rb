@@ -27,8 +27,11 @@ RSpec.describe 'Return the content of a specific article' do
       get "/v1/articles/1"
     end
 
-    it 'returns error' do
+    it 'returns correct HTTP status code' do
       expect(response.status).to eq 404
+    end
+
+    it 'returns correct error message' do
       expect(response_json["error_message"]).to eq "The article couldn't be found"
     end
   end
