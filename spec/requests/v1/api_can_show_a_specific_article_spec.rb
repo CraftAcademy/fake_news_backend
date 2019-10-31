@@ -17,6 +17,10 @@ RSpec.describe 'Return the content of a specific article' do
            
       expect(response_json).to eq expected_response
     end
+
+    it 'returns an affirmative response' do
+      expect(response.status).to eq 200
+    end
   end
 
   describe 'return error' do
