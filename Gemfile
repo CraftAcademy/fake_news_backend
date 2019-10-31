@@ -11,6 +11,7 @@ gem 'bootsnap', '>= 1.4.2', require: false
 gem 'coveralls', require: false
 gem 'devise_token_auth'
 gem 'rack-cors', require: 'rack/cors'
+gem 'aws-sdk-s3'
 
 group :development, :test do
   gem 'pry-rails'
