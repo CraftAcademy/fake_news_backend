@@ -9,14 +9,11 @@ class V1::ArticlesController < ApplicationController
   end
 
   def show
-    
-    binding.pry
-    
-    if @article.nil?
-      render_error_message("The article couldn't be found", 404)
-
-    elsif @article = Article.find(params[:id])
+    if Article.exists?(id: params[:id])
+      @article = Article.find(params[:id])
       render json: @article, serializer: Articles::IndexSerializer
+    else
+      render_error_message("The article couldn't be found", 404)
     end
   end
 
