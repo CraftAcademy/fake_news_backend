@@ -1,4 +1,5 @@
 require 'coveralls'
+require 'pundit/matchers'
 Coveralls.wear!
 
 RSpec.configure do |config|
