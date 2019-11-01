@@ -1,8 +1,8 @@
 FactoryBot.define do
-  factory :user do
-    email { "user@random.com" }
+  factory :journalist do
+    email { "journalist@random.com" }
     password { "password" }
     password_confirmation { "password" }
-    role { 0 }
+    role { 2 }
   end
 end

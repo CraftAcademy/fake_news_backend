@@ -1,5 +1,9 @@
 class ArticlePolicy < ApplicationPolicy
-  def method_name
-    
+  def show?
+    @user.subscriber?
+  end
+
+  def edit?
+    @user.journalist?
   end
 end

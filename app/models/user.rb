@@ -2,7 +2,7 @@ class User < ActiveRecord::Base
   extend Devise::Models
   after_initialize :set_default_role, if: :new_record?
 
-    enum role: [:visitor, :journalist]
+    enum role: [:user, :subscriber, :journalist]
 
     devise :database_authenticatable, :registerable,
            :recoverable, :rememberable, :trackable, :validatable
@@ -11,6 +11,14 @@ class User < ActiveRecord::Base
   private
 
   def set_default_role
-    self.role ||= :visitor
+    self.role ||= :user
+  end
+
+  def journalist? 
+    self.role == :journalist
+  end
+
+  def subscriber?
+    self.role == :subscriber
   end
 end

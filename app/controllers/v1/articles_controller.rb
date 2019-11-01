@@ -1,4 +1,6 @@
 class V1::ArticlesController < ApplicationController
+  before_action :authenticate_user!
+
   def index
     articles = Article.all
     if articles.empty? 
@@ -41,5 +43,9 @@ class V1::ArticlesController < ApplicationController
   
   def render_error_message(message, status) 
     render json: { error_message: message }, status: status
+  end
+
+  def can_perform_update
+
   end
 end
