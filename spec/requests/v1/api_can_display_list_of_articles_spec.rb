@@ -1,7 +1,6 @@
 RSpec.describe 'GET articles index' do 
   describe 'lists a collection of articles' do 
     let!(:articles) { 2.times { create(:article) } }
-
     before do
       get '/v1/articles'
     end
@@ -10,20 +9,16 @@ RSpec.describe 'GET articles index' do
       expect(response_json.count).to eq 2
     end
 
-    it 'returns the data in its correct structure' do
-      expected_response = [
-        {
-          "id"=>Article.first.id,
-          "title"=>"TitleString",
-          "content"=>"ContentText"
-        },
-        {
-          "id"=>Article.last.id,
-          "title"=>"TitleString",
-          "content"=>"ContentText"
-        }
-      ]
-      expect(response_json).to eq expected_response
+    it 'Article has title' do
+      expect(response_json.first['title']).to eq Article.first.title
+    end
+
+    it 'Article has content' do
+      expect(response_json.first['content']).to eq Article.first.content
+    end
+
+    it 'Article has image' do
+      expect(response_json.first).to include 'image'
     end
   end
   

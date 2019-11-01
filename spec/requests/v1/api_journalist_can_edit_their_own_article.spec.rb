@@ -4,7 +4,7 @@
 #     let(:headers) { { HTTP_ACCEPT: 'application/json' } }
 
 #     describe 'user roles are permitted'
-#     permit_action(:visitor).to eq true
+#     # permit_action(:visitor).to eq true
 #   end
 # end
 
@@ -16,6 +16,7 @@
 #   let(:article) { Article.create }
 
 #   context 'being a visitor' do
+#     permit_action(:visitor).to eq true
 #     let(:user) { nil }
 
 #     it { is_expected.to permit_action(:show) }

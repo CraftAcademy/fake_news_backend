@@ -12,6 +12,7 @@ gem 'coveralls', require: false
 gem 'devise_token_auth'
 gem 'rack-cors', require: 'rack/cors'
 gem 'pundit'
+gem 'aws-sdk-s3'
 
 group :development, :test do
   gem 'pry-rails'
