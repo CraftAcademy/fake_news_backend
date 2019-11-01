@@ -12,7 +12,7 @@ RSpec.describe 'User Login', type: :request do
         'data' => {
           'id' => user.id, 'uid' => user.email, 'email' => user.email,
           'provider' => 'email', 'name' => nil, 'nickname' => nil,
-          'image' => nil, 'allow_password_change' => false
+          'role' => user.role, 'image' => nil, 'allow_password_change' => false,
         }    
       }
 
