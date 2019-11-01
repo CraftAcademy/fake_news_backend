@@ -12,9 +12,6 @@ class User < ActiveRecord::Base
   end
 
   def journalist?
-    
-    binding.pry
-    
     self.role == 'journalist'
   end
 

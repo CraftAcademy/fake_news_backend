@@ -15,6 +15,7 @@ class ArticlePolicy < ApplicationPolicy
 
   def show?
     @user.subscriber?
+    @user.journalist?
   end
 
   def update?
