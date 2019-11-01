@@ -2,9 +2,9 @@ describe ArticlePolicy do
   subject { described_class.new(user, article) }
   let(:article) { create(:article) }
 
-  context 'user is a subscriber' do
+  context 'Visitor can view landing page' do
     let(:user) { nil }
-    it { is_expected.to permit_actions [:show, :index] }
+    it { is_expected.to permit_actions [:index] }
   end
 
   context 'user can not create a new article' do
@@ -13,7 +13,7 @@ describe ArticlePolicy do
   end
 
   context 'user of role subscriber cannot edit or update an article' do
-    let(:user) { create(:user, role: 1) }
+    let(:user) { create(:user, role: 'subscriber') }
 
     it { is_expected.to forbid_edit_and_update_actions }
   end

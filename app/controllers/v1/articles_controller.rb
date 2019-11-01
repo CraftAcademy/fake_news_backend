@@ -1,5 +1,5 @@
 class V1::ArticlesController < ApplicationController
-  before_action :authenticate_user!
+  before_action :authenticate_user!,  except: :index
 
     def index
       articles = Article.all
@@ -12,8 +12,8 @@ class V1::ArticlesController < ApplicationController
 
     def show
       if Article.exists?(id: params[:id])
-        article = Article.find(params[:id])
-        render json: article, serializer: Articles::IndexSerializer
+        @article = Article.find(params[:id])
+        render json: @article, serializer: Articles::IndexSerializer
       else
         render_error_message("The article couldn't be found", 404)
       end
@@ -55,9 +55,5 @@ class V1::ArticlesController < ApplicationController
     
     def render_error_message(message, status) 
       render json: { error_message: message }, status: status
-    end
-
-    def can_perform_update
-
     end
   end
