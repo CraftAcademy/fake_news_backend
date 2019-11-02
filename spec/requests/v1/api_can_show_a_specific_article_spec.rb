@@ -1,6 +1,3 @@
-require 'rails_helper'
-include ActionController::RespondWith
-
 RSpec.describe 'Return the content of a specific article' do
   describe 'return article successfully' do
 

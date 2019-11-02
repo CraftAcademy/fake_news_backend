@@ -1,12 +1,20 @@
 RSpec.describe 'Can create article with attributes' do
 
   describe "can post article successfully" do
-    let(:headers) { {HTTP_ACCEPT:"application/json"} }
+    let(:journalist) { create(:user, role: 'journalist') }
+    #let!(:article) { create(:article, journalist: journalist) }
+    let(:credentials) { journalist.create_new_auth_token}
+    let(:headers) {{ HTTP_ACCEPT: "application/json" }.merge!(credentials)}
 
     before do
+      
+     # binding.pry
+      
+
       post '/v1/articles', params: {
         title: "Which drugs can kill you?",
         content: "Oh it is all of them!",
+        role: "journalist",
         image: [{
           type: 'application/jpg',
           encoder: 'name=new_iphone.jpg;base64',
@@ -15,6 +23,10 @@ RSpec.describe 'Can create article with attributes' do
         }]
       },
       headers: headers
+      
+      #binding.pry
+      
+
     end
 
     it "returns 200 response" do
@@ -28,7 +40,10 @@ RSpec.describe 'Can create article with attributes' do
   end
 
   describe "cannot post article successfully with incomplete information" do
-    let(:headers) { {HTTP_ACCEPT:"application/json"} }
+    let(:journalist) { create(:user, role: 'journalist') }
+    #let!(:article) { create(:article, journalist: journalist) }
+    let(:credentials) { journalist.create_new_auth_token}
+    let(:headers) {{ HTTP_ACCEPT: "application/json" }.merge!(credentials)}
 
     before do
       post '/v1/articles', params: {

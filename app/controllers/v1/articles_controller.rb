@@ -3,6 +3,7 @@ class V1::ArticlesController < ApplicationController
 
     def index
       articles = Article.all
+      
       if articles.empty? 
         render_error_message("There are no articles here", 404)
       else
@@ -20,7 +21,9 @@ class V1::ArticlesController < ApplicationController
     end
 
     def create
-      @article = Article.create(article_params)
+      #authorize Article.create
+      @article = Article.create(article_params.merge!(journalist: current_v1_user))
+      #@article = Article.create(article_params)
       attach_image
       if @article.persisted? && @article.image.attached?
         render json: { message: 'Article was successfully created' }
