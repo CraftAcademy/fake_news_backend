@@ -24,8 +24,8 @@ class V1::ArticlesController < ApplicationController
     authorize Article.create
     @article = Article.create(article_params.merge!(journalist: current_user))
     
-    attach_image
-    if @article.persisted? && @article.image.attached?
+    
+    if @article.persisted? && attach_image
       render json: { message: 'Article was successfully created' }
     else
       render_error_message(@article.errors.full_messages.to_sentence, 400)
@@ -36,8 +36,8 @@ class V1::ArticlesController < ApplicationController
     @article = Article.find(params[:id])
     
     authorize @article
-    attach_image
-    if @article.update(article_params) && @article.image.attached?
+    
+    if @article.update(article_params) && attach_image
       render json: {message: 'Edit of article went well'}, status: 200
     else
       render_error_message(@article.errors.full_messages.to_sentence, 400)
