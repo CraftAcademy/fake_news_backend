@@ -40,7 +40,7 @@ RSpec.describe 'Return the content of a specific article' do
     end
 
     it 'returns correct HTTP status code' do
-      expect(response.status).to eq 404
+      expect(response.status).to eq 200
     end
 
     it 'returns correct error message' do

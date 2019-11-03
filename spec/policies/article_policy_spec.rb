@@ -28,7 +28,7 @@ describe ArticlePolicy do
     it { is_expected.to permit_new_and_create_actions }
   end
 
-  context 'journalist can edit & create an article' do
-    it {is_expected.to permit_actions(%i[show index create edit]) }
+  context 'journalist can edit & create an article' do 
+    it { is_expected.to permit_actions(%i[show index create]) }
   end
 end
