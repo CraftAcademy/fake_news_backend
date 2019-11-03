@@ -12,7 +12,7 @@ RSpec.describe 'Can create and update article with attributes' do
       params: {
         title: "Which drugs can kill you?",
         content: "Oh it is all of them!",
-        role: "journalist",
+        journalist: journalist.name,
         image: [{
           type: 'application/jpg',
           encoder: 'name=new_iphone.jpg;base64',
@@ -38,7 +38,7 @@ RSpec.describe 'Can create and update article with attributes' do
     end
   end
 
-  describe "Unsuccessful article update" do
+  describe "Unsuccessful article update due to short content" do
     let(:journalist) { create(:user, role: 'journalist') }
     let!(:article) { create(:article, journalist: journalist) }
     let(:credentials) { journalist.create_new_auth_token}
@@ -50,7 +50,7 @@ RSpec.describe 'Can create and update article with attributes' do
       params: {
         title: "Which drugs can kill you?",
         content: "NONE",
-        role: "journalist",
+        journalist: journalist.name,
         image: [{
           type: 'application/jpg',
           encoder: 'name=new_iphone.jpg;base64',
@@ -71,7 +71,7 @@ RSpec.describe 'Can create and update article with attributes' do
     end
   end
 
-  describe "Unauthorized article update by user" do
+  describe "Unauthorized article update by subscriber" do
     let(:subscriber) { create(:user, role: 'subscriber') }
     let!(:article) { create(:article)}
     let(:credentials) { subscriber.create_new_auth_token}
@@ -83,7 +83,7 @@ RSpec.describe 'Can create and update article with attributes' do
       params: {
         title: "Which drugs can kill you?",
         content: "Hello I am a subscriber!",
-        role: "journalist",
+        journalist: subscriber.name,
         image: [{
           type: 'application/jpg',
           encoder: 'name=new_iphone.jpg;base64',
@@ -96,6 +96,41 @@ RSpec.describe 'Can create and update article with attributes' do
     end
 
     it "returns 401 response" do  
+      expect(response.status).to eq 401
+    end
+
+    it "returns error message" do
+      expect(response_json["error"]).to eq "You are not authorized!"
+    end
+  end
+
+  describe "Unsuccessful article update from wrong journalist" do
+    let(:journalist_1) { create(:user, role: 'journalist') }
+    let(:journalist_2) { create(:user, role: 'journalist') }
+    let!(:article) { create(:article, journalist: journalist_1) }
+    let(:credentials) { journalist_2.create_new_auth_token}
+    let(:headers) {{ HTTP_ACCEPT: "application/json" }.merge!(credentials)}
+
+    before do
+      put "/v1/articles/#{article.id}",
+      
+      params: {
+        title: "Which drugs can kill you?",
+        content: "It seemed to work out fine for Hunter S. Thompson",
+        journalist: journalist_2.name,
+        journalist_id: journalist_2.id,
+        image: [{
+          type: 'application/jpg',
+          encoder: 'name=new_iphone.jpg;base64',
+          data: 'iVBORw0KGgoAAAANSUhEUgAABjAAAAOmCAYAAABFYNwHAAAgAElEQVR4XuzdB3gU1cLG8Te9EEgISQi9I71KFbBXbFixN6zfvSiIjSuKInoVFOyIDcWuiKiIol4Q6SBVOtI7IYSWBkm',
+          extension: 'jpg'
+        }]
+      },
+      
+      headers: headers
+    end
+
+    it "returns 401 response" do
       expect(response.status).to eq 401
     end
 

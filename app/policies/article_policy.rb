@@ -14,12 +14,10 @@ class ArticlePolicy < ApplicationPolicy
   end
 
   def show?
-    @user.subscriber?
-    @user.journalist?
+    @user.subscriber? || @user.journalist?
   end
 
   def update?
-    @user.journalist?
-    # TODO: current_user.id == @article.journalist_id
+    @user.journalist? && ( @user.id == self.record.journalist_id )
   end
 end
