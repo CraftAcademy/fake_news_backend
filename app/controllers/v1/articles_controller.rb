@@ -5,7 +5,7 @@ class V1::ArticlesController < ApplicationController
     articles = Article.all
     
     if articles.empty? 
-      render_error_message("There are no articles here", 404)
+      render_error_message("There are no articles here", 200)
     else
       render json: articles, each_serializer: Articles::IndexSerializer
     end
@@ -16,7 +16,7 @@ class V1::ArticlesController < ApplicationController
       @article = Article.find(params[:id])
       render json: @article, serializer: Articles::IndexSerializer
     else
-      render_error_message("The article couldn't be found", 404)
+      render_error_message("The article couldn't be found", 200)
     end
   end
 
