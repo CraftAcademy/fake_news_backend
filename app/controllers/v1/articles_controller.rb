@@ -13,8 +13,8 @@ class V1::ArticlesController < ApplicationController
 
   def show
     if Article.exists?(id: params[:id])
-      @article = Article.find(params[:id])
-      render json: @article, serializer: Articles::IndexSerializer
+      article = Article.find(params[:id])
+      render json: article, serializer: Articles::IndexSerializer
     else
       render_error_message("The article couldn't be found", 200)
     end
@@ -22,25 +22,25 @@ class V1::ArticlesController < ApplicationController
 
   def create
     authorize Article.create
-    @article = Article.create(article_params.merge!(journalist: current_user))
+    article = Article.create(article_params.merge!(journalist: current_user))
     
     
-    if @article.persisted? && attach_image
+    if article.persisted? && attach_image(article)
       render json: { message: 'Article was successfully created' }
     else
-      render_error_message(@article.errors.full_messages.to_sentence, 400)
+      render_error_message(article.errors.full_messages.to_sentence, 400)
     end
   end
   
   def update
-    @article = Article.find(params[:id])
+    article = Article.find(params[:id])
     
-    authorize @article
+    authorize article
     
-    if @article.update(article_params) && attach_image
+    if article.update(article_params) && attach_image(article)
       render json: {message: 'Edit of article went well'}, status: 200
     else
-      render_error_message(@article.errors.full_messages.to_sentence, 400)
+      render_error_message(article.errors.full_messages.to_sentence, 400)
     end
   end
 
@@ -50,9 +50,9 @@ class V1::ArticlesController < ApplicationController
     params.permit(:title, :content, keys: [:image])
   end
 
-  def attach_image
+  def attach_image(article)
     if params['image'] && params['image'].present?
-      DecodeService.attach_image(params['image'].first, @article.image)
+      DecodeService.attach_image(params['image'].first, article.image)
     end
   end
   
