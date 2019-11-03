@@ -70,4 +70,37 @@ RSpec.describe 'Can create and update article with attributes' do
       expect(response_json["error_message"]).to eq "Content is too short (minimum is 10 characters)"
     end
   end
+
+  describe "Unauthorized article update by user" do
+    let(:subscriber) { create(:user, role: 'subscriber') }
+    let!(:article) { create(:article)}
+    let(:credentials) { subscriber.create_new_auth_token}
+    let(:headers) {{ HTTP_ACCEPT: "application/json" }.merge!(credentials)}
+
+    before do
+      put "/v1/articles/#{article.id}",
+      
+      params: {
+        title: "Which drugs can kill you?",
+        content: "Hello I am a subscriber!",
+        role: "journalist",
+        image: [{
+          type: 'application/jpg',
+          encoder: 'name=new_iphone.jpg;base64',
+          data: 'iVBORw0KGgoAAAANSUhEUgAABjAAAAOmCAYAAABFYNwHAAAgAElEQVR4XuzdB3gU1cLG8Te9EEgISQi9I71KFbBXbFixN6zfvSiIjSuKInoVFOyIDcWuiKiIol4Q6SBVOtI7IYSWBkm',
+          extension: 'jpg'
+        }]
+      },
+      
+      headers: headers
+    end
+
+    it "returns 401 response" do  
+      expect(response.status).to eq 401
+    end
+
+    it "returns error message" do
+      expect(response_json["error"]).to eq "You are not authorized!"
+    end
+  end
 end

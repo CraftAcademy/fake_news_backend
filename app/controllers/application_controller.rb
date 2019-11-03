@@ -13,6 +13,6 @@ class ApplicationController < ActionController::API
   end
 
   def user_not_authorized
-    render json: {error: "These are not the articles you are looking for!"}, status: 401
+    render json: {error: "You are not authorized!"}, status: 401
   end
 end

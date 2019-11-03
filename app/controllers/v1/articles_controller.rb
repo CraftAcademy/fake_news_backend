@@ -1,5 +1,5 @@
 class V1::ArticlesController < ApplicationController
-  before_action :authenticate_v1_user!,  except: :index
+  before_action :authenticate_user!,  except: :index
 
   def index
     articles = Article.all
@@ -21,7 +21,9 @@ class V1::ArticlesController < ApplicationController
   end
 
   def create
-    @article = Article.create(article_params.merge!(journalist: current_v1_user))
+    authorize Article.create
+    @article = Article.create(article_params.merge!(journalist: current_user))
+    
     attach_image
     if @article.persisted? && @article.image.attached?
       render json: { message: 'Article was successfully created' }
@@ -32,7 +34,8 @@ class V1::ArticlesController < ApplicationController
   
   def update
     @article = Article.find(params[:id])
-
+    
+    authorize @article
     attach_image
     if @article.update(article_params) && @article.image.attached?
       render json: {message: 'Edit of article went well'}, status: 200

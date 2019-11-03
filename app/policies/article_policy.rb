@@ -20,5 +20,6 @@ class ArticlePolicy < ApplicationPolicy
 
   def update?
     @user.journalist?
+    # TODO: current_user.id == @article.journalist_id
   end
 end

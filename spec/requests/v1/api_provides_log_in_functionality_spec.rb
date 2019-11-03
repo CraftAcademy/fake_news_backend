@@ -4,7 +4,7 @@ RSpec.describe 'User Login', type: :request do
 
   describe 'User tries to login with valid credentials' do
     it 'valid credentials returns user' do
-      post '/v1/auth/sign_in', params: {  email: user.email,
+      post '/auth/sign_in', params: {  email: user.email,
                                           password: user.password
                                        }, headers: headers
 
@@ -23,7 +23,7 @@ RSpec.describe 'User Login', type: :request do
     describe 'Tries to login using invalid credentials' do   
     
       before do
-        post '/v1/auth/sign_in', params: {  email: user.email,
+        post '/auth/sign_in', params: {  email: user.email,
                                             password: 'wrong_password'
                                          }, headers: headers
       end
@@ -38,7 +38,7 @@ RSpec.describe 'User Login', type: :request do
       end
 
       before do
-        post '/v1/auth/sign_in', params: {  email: 'wrong@email.com',
+        post '/auth/sign_in', params: {  email: 'wrong@email.com',
                                             password: user.password
                                          }, headers: headers
       end
