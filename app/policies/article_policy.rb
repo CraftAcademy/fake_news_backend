@@ -10,14 +10,14 @@ class ArticlePolicy < ApplicationPolicy
   end
 
   def create?
-    @user.journalist?
+    @user.try(:journalist?)
   end
 
   def show?
-    @user.subscriber? || @user.journalist?
+    @user.try(:subscriber?) || @user.try(:journalist?)
   end
 
   def update?
-    @user.journalist? && ( @user.id == self.record.journalist_id )
+    @user.try(:journalist?) && ( @user.try(:id) == self.record.journalist_id )
   end
 end

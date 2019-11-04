@@ -1,34 +1,35 @@
 describe ArticlePolicy do
-  subject { described_class.new(user, article) }
+
   let(:article) { create(:article) }
 
-  context 'Visitor can view landing page' do
+  context 'Visitor can access index of articles' do
+    subject { described_class.new(user, article) }
     let(:user) { nil }
+
     it { is_expected.to permit_actions [:index] }
+    it { is_expected.to forbid_actions [:create, :update, :show] }
   end
 
-  context 'user can not create a new article' do
+  context 'Registered user can not create a new article' do
+    subject { described_class.new(user, article) }
     let(:user) { create(:user) }
-    it { is_expected.to forbid_new_and_create_actions }
+    
+    it { is_expected.to forbid_actions [:create, :update] }
   end
 
-  context 'user of role subscriber cannot edit or update an article' do
-    let(:user) { create(:user, role: 'subscriber') }
+  context 'Registered user with subscription cannot edit or update an article' do
+    subject { described_class.new(subscriber, article) }
+    let(:subscriber) { create(:user, role: 'subscriber') }
 
-    it { is_expected.to forbid_edit_and_update_actions }
-  end
-end
-
-describe ArticlePolicy do
-  subject { described_class.new(user, article) }
-  let(:user) { create(:user, role: 'journalist') }
-  let(:article) { create(:article, journalist: user) }
-
-  context 'user is a journalist' do
-    it { is_expected.to permit_new_and_create_actions }
+    it { is_expected.to permit_actions [:index, :show] }
+    it { is_expected.to forbid_actions [:create, :update] }
   end
 
-  context 'journalist can edit & create an article' do 
+  context 'Journalist can create and update articles' do
+    subject { described_class.new(journalist, article) }
+    let(:journalist) { create(:user, role: 'journalist') }
+    let(:article) { create(:article, journalist: journalist) }
+
     it { is_expected.to permit_actions(%i[show index create update]) }
   end
 end
