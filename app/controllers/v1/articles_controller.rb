@@ -38,7 +38,7 @@ class V1::ArticlesController < ApplicationController
     authorize article
     
     if article.update(article_params) && attach_image(article)
-      render json: {message: 'Edit of article went well'}, status: 200
+      render json: {message: 'Article was successfully edited'}, status: 200
     else
       render_error_message(article.errors.full_messages.to_sentence, 400)
     end
