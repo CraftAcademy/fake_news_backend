@@ -5,7 +5,7 @@ class V1::ArticlesController < ApplicationController
     articles = Article.all
     
     if articles.empty? 
-      render_error_message("There are no articles here", 417)
+      render_error_message("There are no articles here", 401)
     else
       render json: articles, each_serializer: Articles::IndexSerializer
     end
