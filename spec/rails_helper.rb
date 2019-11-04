@@ -1,5 +1,11 @@
+
+require 'coveralls'
+require 'pundit/matchers'
 require 'spec_helper'
+
 ENV['RAILS_ENV'] ||= 'test'
+Coveralls.wear!
+
 
 require File.expand_path('../config/environment', __dir__)
 
@@ -30,4 +36,8 @@ Shoulda::Matchers.configure do |config|
     with.test_framework :rspec
     with.library :rails 
   end
+end
+
+Pundit::Matchers.configure do |config|
+  config.user_alias = :account
 end

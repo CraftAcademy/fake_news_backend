@@ -11,6 +11,7 @@ gem 'bootsnap', '>= 1.4.2', require: false
 gem 'coveralls', require: false
 gem 'devise_token_auth'
 gem 'rack-cors', require: 'rack/cors'
+gem 'pundit'
 gem 'aws-sdk-s3'
 
 group :development, :test do
@@ -19,6 +20,8 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'factory_bot_rails'
   gem 'shoulda-matchers'
+  gem 'pundit-matchers'
+  gem 'faker'
 end
 
 group :development do

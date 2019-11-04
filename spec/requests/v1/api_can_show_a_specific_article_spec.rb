@@ -1,10 +1,14 @@
 RSpec.describe 'Return the content of a specific article' do
   describe 'return article successfully' do
-    let!(:article) {create(:article)}
-    let(:headers) { { HTTP_ACCEPT: 'application/json' } }
+
+    let(:journalist) { create(:user, role: 'journalist') }
+    let!(:article) { create(:article, journalist: journalist) }
+    let(:credentials) { journalist.create_new_auth_token}
+    let(:headers) {{ HTTP_ACCEPT: "application/json" }.merge!(credentials)}
 
     before do
-      get "/v1/articles/#{article.id}"
+      get "/v1/articles/#{article.id}",
+      headers: headers
     end
 
     it 'Article has title' do
@@ -24,7 +28,27 @@ RSpec.describe 'Return the content of a specific article' do
     end
   end
 
-  describe 'return error' do
+  describe 'Article not found after login' do
+    let(:journalist) { create(:user, role: 'journalist') }
+    let!(:article) { create(:article, journalist: journalist) }
+    let(:credentials) { journalist.create_new_auth_token}
+    let(:headers) {{ HTTP_ACCEPT: "application/json" }.merge!(credentials)}
+
+    before do
+      get "/v1/articles/1",
+      headers: headers
+    end
+
+    it 'returns correct HTTP status code' do
+      expect(response.status).to eq 200
+    end
+
+    it 'returns correct error message' do
+      expect(response_json["error_message"]).to eq "The article couldn't be found"
+    end
+  end
+
+  describe 'Not signed in error' do
     let!(:article) {create(:article)}
     let(:headers) { { HTTP_ACCEPT: 'application/json' } }
 
@@ -33,11 +57,11 @@ RSpec.describe 'Return the content of a specific article' do
     end
 
     it 'returns correct HTTP status code' do
-      expect(response.status).to eq 404
+      expect(response.status).to eq 401
     end
 
     it 'returns correct error message' do
-      expect(response_json["error_message"]).to eq "The article couldn't be found"
+      expect(response_json["errors"].first).to eq "You need to sign in or sign up before continuing."
     end
   end
 end
