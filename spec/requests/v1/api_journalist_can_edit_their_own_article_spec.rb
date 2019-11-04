@@ -1,26 +1,27 @@
 RSpec.describe 'Can create and update article with attributes' do
+  let(:journalist) { create(:user, role: 'journalist') }
+  let!(:article) { create(:article, journalist: journalist) }
+  let(:credentials) { journalist.create_new_auth_token}
+  let(:headers) {{ HTTP_ACCEPT: "application/json" }.merge!(credentials)}
+  let(:image) do 
+    [{
+      type: 'application/jpg',
+      encoder: 'name=new_iphone.jpg;base64',
+      data: 'iVBORw0KGgoAAAANSUhEUgAABjAAAAOmCAYAAABFYNwHAAAgAElEQVR4XuzdB3gU1cLG8Te9EEgISQi9I71KFbBXbFixN6zfvSiIjSuKInoVFOyIDcWuiKiIol4Q6SBVOtI7IYSWBkm',
+      extension: 'jpg'
+    }]
+  end
 
   describe "can post article successfully" do
-    let(:journalist) { create(:user, role: 'journalist') }
-    let!(:article) { create(:article, journalist: journalist) }
-    let(:credentials) { journalist.create_new_auth_token}
-    let(:headers) {{ HTTP_ACCEPT: "application/json" }.merge!(credentials)}
 
     before do
       put "/v1/articles/#{article.id}",
-      
       params: {
         title: "Which drugs can kill you?",
         content: "Oh it is all of them!",
-        journalist: journalist.name,
-        image: [{
-          type: 'application/jpg',
-          encoder: 'name=new_iphone.jpg;base64',
-          data: 'iVBORw0KGgoAAAANSUhEUgAABjAAAAOmCAYAAABFYNwHAAAgAElEQVR4XuzdB3gU1cLG8Te9EEgISQi9I71KFbBXbFixN6zfvSiIjSuKInoVFOyIDcWuiKiIol4Q6SBVOtI7IYSWBkm',
-          extension: 'jpg'
-        }]
-      },
-      
+        journalist: journalist,
+        image: image
+      },     
       headers: headers
     end
 
@@ -39,27 +40,15 @@ RSpec.describe 'Can create and update article with attributes' do
   end
 
   describe "Unsuccessful article update due to short content" do
-    let(:journalist) { create(:user, role: 'journalist') }
-    let!(:article) { create(:article, journalist: journalist) }
-    let(:credentials) { journalist.create_new_auth_token}
-    let(:headers) {{ HTTP_ACCEPT: "application/json" }.merge!(credentials)}
-
     before do
-      put "/v1/articles/#{article.id}",
-      
-      params: {
-        title: "Which drugs can kill you?",
-        content: "NONE",
-        journalist: journalist.name,
-        image: [{
-          type: 'application/jpg',
-          encoder: 'name=new_iphone.jpg;base64',
-          data: 'iVBORw0KGgoAAAANSUhEUgAABjAAAAOmCAYAAABFYNwHAAAgAElEQVR4XuzdB3gU1cLG8Te9EEgISQi9I71KFbBXbFixN6zfvSiIjSuKInoVFOyIDcWuiKiIol4Q6SBVOtI7IYSWBkm',
-          extension: 'jpg'
-        }]
-      },
-      
-      headers: headers
+      put "/v1/articles/#{article.id}",    
+        params: {
+          title: "Which drugs can kill you?",
+          content: "NONE",
+          journalist: journalist,
+          image: image
+        },
+        headers: headers
     end
 
     it "returns 400 response" do
@@ -78,21 +67,14 @@ RSpec.describe 'Can create and update article with attributes' do
     let(:headers) {{ HTTP_ACCEPT: "application/json" }.merge!(credentials)}
 
     before do
-      put "/v1/articles/#{article.id}",
-      
-      params: {
-        title: "Which drugs can kill you?",
-        content: "Hello I am a subscriber!",
-        journalist: subscriber.name,
-        image: [{
-          type: 'application/jpg',
-          encoder: 'name=new_iphone.jpg;base64',
-          data: 'iVBORw0KGgoAAAANSUhEUgAABjAAAAOmCAYAAABFYNwHAAAgAElEQVR4XuzdB3gU1cLG8Te9EEgISQi9I71KFbBXbFixN6zfvSiIjSuKInoVFOyIDcWuiKiIol4Q6SBVOtI7IYSWBkm',
-          extension: 'jpg'
-        }]
-      },
-      
-      headers: headers
+      put "/v1/articles/#{article.id}",     
+        params: {
+          title: "Which drugs can kill you?",
+          content: "Hello I am a subscriber!",
+          journalist: subscriber,
+          image: image
+        }, 
+        headers: headers
     end
 
     it "returns 401 response" do  
@@ -105,29 +87,19 @@ RSpec.describe 'Can create and update article with attributes' do
   end
 
   describe "Unsuccessful article update from wrong journalist" do
-    let(:journalist_1) { create(:user, role: 'journalist') }
     let(:journalist_2) { create(:user, role: 'journalist') }
-    let!(:article) { create(:article, journalist: journalist_1) }
     let(:credentials) { journalist_2.create_new_auth_token}
     let(:headers) {{ HTTP_ACCEPT: "application/json" }.merge!(credentials)}
 
     before do
-      put "/v1/articles/#{article.id}",
-      
-      params: {
-        title: "Which drugs can kill you?",
-        content: "It seemed to work out fine for Hunter S. Thompson",
-        journalist: journalist_2.name,
-        journalist_id: journalist_2.id,
-        image: [{
-          type: 'application/jpg',
-          encoder: 'name=new_iphone.jpg;base64',
-          data: 'iVBORw0KGgoAAAANSUhEUgAABjAAAAOmCAYAAABFYNwHAAAgAElEQVR4XuzdB3gU1cLG8Te9EEgISQi9I71KFbBXbFixN6zfvSiIjSuKInoVFOyIDcWuiKiIol4Q6SBVOtI7IYSWBkm',
-          extension: 'jpg'
-        }]
-      },
-      
-      headers: headers
+      put "/v1/articles/#{article.id}", 
+        params: {
+          title: "Which drugs can kill you?",
+          content: "It seemed to work out fine for Hunter S. Thompson",
+          journalist: journalist_2,
+          image: image
+        },
+        headers: headers
     end
 
     it "returns 401 response" do
