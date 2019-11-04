@@ -19,8 +19,10 @@ RSpec.describe 'Provides a way to add subscritption' do
     end
 
     it 'User has insufficent funds' do
-      StripeMock.prepare_card_error(:card_declined)
+      
       binding.pry
+      
+      StripeMock.prepare_card_error(:card_declined)
       expect { Stripe::Charge.create(amount: 1, currency: 'usd') }.to raise_error {|e|
         expect(e).to be_a Stripe::CardError
         expect(e.http_status).to eq(402)
