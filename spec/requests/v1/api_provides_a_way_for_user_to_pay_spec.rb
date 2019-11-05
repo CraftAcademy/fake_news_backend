@@ -29,6 +29,11 @@ RSpec.describe 'Provides a way to add subscription' do
       expect(user.role).to eq('subscriber')
     end
 
+    it 'Response message indicates a successful transaction' do
+      successful_token
+      expect(response_json['message']).to eq 'Transaction successful'
+    end
+
     it 'User role remains due to missing Stripe token' do
       unsuccessful_token
       expect(user.role).to eq('user')
@@ -37,6 +42,11 @@ RSpec.describe 'Provides a way to add subscription' do
     it "Transaction recieves an error status of 402" do
       unsuccessful_token   
       expect(response.status).to eq 402
+    end
+
+    it 'Response message indicates a unsuccessful transaction' do
+      unsuccessful_token
+      expect(response_json['errors']).to eq 'No stripe token detected'
     end
   end
 end
