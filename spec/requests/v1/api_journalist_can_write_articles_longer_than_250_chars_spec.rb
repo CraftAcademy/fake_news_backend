@@ -2,6 +2,13 @@ RSpec.describe 'Can create article with attributes' do
   let(:journalist) { create(:user, role: 'journalist') }
   let(:credentials) { journalist.create_new_auth_token}
   let(:headers) {{ HTTP_ACCEPT: "application/json" }.merge!(credentials)}
+  let(:error_post) {post '/v1/articles', params: {
+                                          title: 'Which drugs can kill you?',
+                                          content: 'Drugs are bad. ' * 1000,
+                                          journalist: journalist,
+                                          image: image
+                                          },
+                                          headers: headers}
   let(:image) do
     [{
       type: 'application/jpg',
@@ -11,12 +18,12 @@ RSpec.describe 'Can create article with attributes' do
     }]
   end
   
-  describe "Journalist can post a long article while not exceeding 10.000 chars" do
+  describe 'Journalist can post a long article while not exceeding 10.000 chars' do
 
-    it "returns 200 response" do
+    it 'returns 200 response' do
       post '/v1/articles', params: {
-        title: "Which drugs can kill you?",
-        content: "Drugs are bad. " * 100,
+        title: 'Which drugs can kill you?',
+        content: 'Drugs are bad. ' * 100,
         journalist: journalist,
         image: image
       },
@@ -25,16 +32,14 @@ RSpec.describe 'Can create article with attributes' do
       expect(response.status).to eq 200
     end
 
-    it "returns 400 response" do
-      post '/v1/articles', params: {
-        title: "Which drugs can kill you?",
-        content: "Drugs are bad. " * 1000,
-        journalist: journalist,
-        image: image
-      },
-      headers: headers
-
+    it 'returns 400 response' do
+      error_post
       expect(response.status).to eq 400
     end
+
+    it 'returns an error message if max content length is exceeded' do
+      error_post
+      expect(response_json['error_message']).to eq 'Content is too long (maximum is 10000 characters)'
+    end 
   end
 end
