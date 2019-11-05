@@ -24,13 +24,11 @@ class V1::PaymentsController < ApplicationController
           render json: {message: 'Transaction successful'}
         else
           render_error('Transaction unsuccessful')
-          #render json: {error: 'Transaction unsuccessful'}, status: 402
         end
       rescue => error
         render_error(error.message)
       end
     else
-      #render json: {error: 'Transaction unsuccessful'}, status: 402
       render_error('No stripe token detected')
     end
   end
