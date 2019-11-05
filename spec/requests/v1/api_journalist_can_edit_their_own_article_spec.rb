@@ -35,7 +35,7 @@ RSpec.describe 'Can create and update article with attributes' do
     end
 
     it "should return a positive confirmation message" do
-      expect(response_json["message"]).to eq "Edit of article went well"
+      expect(response_json["message"]).to eq "Article was successfully edited"
     end
   end
 

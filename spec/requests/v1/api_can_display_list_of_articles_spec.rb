@@ -28,7 +28,7 @@ RSpec.describe 'GET articles index' do
     end
 
     it 'returns error status' do
-      expect(response.status).to eq 200
+      expect(response.status).to eq 401
     end
 
     it 'returns error message' do

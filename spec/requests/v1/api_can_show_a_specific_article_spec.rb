@@ -40,11 +40,11 @@ RSpec.describe 'Return the content of a specific article' do
     end
 
     it 'returns correct HTTP status code' do
-      expect(response.status).to eq 200
+      expect(response.status).to eq 401
     end
 
     it 'returns correct error message' do
-      expect(response_json["error_message"]).to eq "The article couldn't be found"
+      expect(response_json["error_message"]).to eq "Unavailable content"
     end
   end
 
