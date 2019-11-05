@@ -31,7 +31,7 @@ RSpec.describe 'Can create article with attributes' do
     it "returns 400 response" do
       post '/v1/articles', params: {
         title: "Which drugs can kill you?",
-        content: "Drugs are bad. " * 10000,
+        content: "Drugs are bad. " * 1000,
         journalist: journalist,
         image: image
       },
