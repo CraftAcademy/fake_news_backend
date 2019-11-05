@@ -1,42 +1,33 @@
 require 'stripe_mock'
 
-RSpec.describe 'Provides a way to add subscritption' do
+RSpec.describe 'Provides a way to add subscription' do
   let(:user) { create(:user) }
-  let(:headers) { { HTTP_ACCEPT: 'application/json' } }
+  let(:credentials) { user.create_new_auth_token}
+  let(:headers) {{ HTTP_ACCEPT: "application/json" }.merge!(credentials)}
   let(:stripe_helper) { StripeMock.create_test_helper }
-  before(:each) { StripeMock.start }
-  after(:each) { StripeMock.stop }
+  before { StripeMock.start }
+  after { StripeMock.stop }
   
   describe 'User would like to pay for subscritption' do
 
-    
-    it 'User successfully pays for subscription' do
-      customer = Stripe::Customer.create({
-        email: 'user@mail.com',
-        source: stripe_helper.generate_card_token
-      })
-      expect(customer.email).to eq('user@mail.com')
+    it 'User successfully pays for subscription and gets a subscriber role' do
+      
+      post '/v1/payments', params: {  stripeEmail: user.email,
+                                      stripeToken: stripe_helper.generate_card_token    
+                                      }, headers: headers
+      user.reload
+      expect(response.status).to eq 200
+      expect(user.role).to eq('subscriber')
     end
 
-    it 'User has insufficent funds' do
-      
+    it 'Transaction fails due to missing Stripe token' do
+      post '/v1/payments', params: {  stripeEmail: user.email,
+                                      stripeToken: nil    
+                                      }, headers: headers
+      user.reload
+      expect(user.role).to eq('user')
+      expect(response.status).to eq 402
       binding.pry
-      
-      StripeMock.prepare_card_error(:card_declined)
-      expect { Stripe::Charge.create(amount: 1, currency: 'usd') }.to raise_error {|e|
-        expect(e).to be_a Stripe::CardError
-        expect(e.http_status).to eq(402)
-        expect(e.code).to eq('card_declined')
-      }
     end
-
-    it 'User has expired card' do
-
-    end
-
-    it 'User inputs invalid card number' do
-
-    end
-
   end
 end
