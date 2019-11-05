@@ -10,7 +10,7 @@ RSpec.describe 'Provides a way to add subscription' do
   
   describe 'User would like to pay for subscritption' do
 
-    it 'User successfully pays for subscription and gets a subscriber role' do
+    it 'User successfully pays for subscription & gets a subscriber role' do
       
       post '/v1/payments', params: {  stripeEmail: user.email,
                                       stripeToken: stripe_helper.generate_card_token    
@@ -20,7 +20,7 @@ RSpec.describe 'Provides a way to add subscription' do
       expect(user.role).to eq('subscriber')
     end
 
-    it 'Transaction fails due to missing Stripe token' do
+    it 'Transaction fails due to missing Stripe token & still has user role' do
       post '/v1/payments', params: {  stripeEmail: user.email,
                                       stripeToken: nil    
                                       }, headers: headers
