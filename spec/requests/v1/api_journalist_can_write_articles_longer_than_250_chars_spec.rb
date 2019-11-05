@@ -11,7 +11,7 @@ RSpec.describe 'Can create article with attributes' do
     }]
   end
   
-  describe "Journalist can post a long article successfully" do
+  describe "Journalist can post a long article while not exceeding 10.000 chars" do
 
     it "returns 200 response" do
       post '/v1/articles', params: {
@@ -24,9 +24,6 @@ RSpec.describe 'Can create article with attributes' do
 
       expect(response.status).to eq 200
     end
-  end
-
-  describe "Journalist can not post an article with 10000+ characters" do
 
     it "returns 400 response" do
       post '/v1/articles', params: {
