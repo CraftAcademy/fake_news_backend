@@ -27,7 +27,6 @@ RSpec.describe 'Provides a way to add subscription' do
       user.reload
       expect(user.role).to eq('user')
       expect(response.status).to eq 402
-      binding.pry
     end
   end
 end

@@ -23,7 +23,6 @@ group :development, :test do
   gem 'shoulda-matchers'
   gem 'pundit-matchers'
   gem 'faker'
-  #gem 'stripe-ruby-mock', '~> 2.5', require: 'stripe_mock'
   gem 'stripe-ruby-mock', '~> 2.5.8', :require => 'stripe_mock'
 
 end
