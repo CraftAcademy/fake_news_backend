@@ -1,5 +1,6 @@
 RSpec.describe 'Can create article with attributes' do
   let(:journalist) { create(:user, role: 'journalist') }
+  let(:category) {FactoryBot.create(:category)}
   let(:credentials) { journalist.create_new_auth_token}
   let(:headers) {{ HTTP_ACCEPT: "application/json" }.merge!(credentials)}
   let(:image) do
@@ -12,13 +13,12 @@ RSpec.describe 'Can create article with attributes' do
   end
   
   describe "can post article successfully" do
-    let(:category) {FactoryBot.create(:category)}
+    
 
     before do
       post '/v1/articles', params: {
         title: "Which drugs can kill you?",
         content: "Oh it is all of them!",
-        category_id: category.id,
         category: category.name,
         journalist: journalist,
         image: image

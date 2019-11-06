@@ -1,2 +1,6 @@
 users = User.create(email: 'user@mail.com', password: 'password')
 journalist = User.create(email: 'journalist@mail.com', password: 'password', role: 'journalist')
+
+# create categories
+
+# create 2-3 articles per category

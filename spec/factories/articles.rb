@@ -4,7 +4,7 @@ FactoryBot.define do
     content { "ContentText" }
     
     association :journalist, factory: :user
-    association :category#, factory: :user
+    association :category
 
     after(:build) do |object|
       object.image.attach(io: File.open(Rails.root.join('spec', 'fixtures', 'dummy-img.png')), filename: "dummy-img.png", content_type: 'image/png')
