@@ -2,13 +2,6 @@ RSpec.describe 'Can create article with attributes' do
   let(:journalist) { create(:user, role: 'journalist') }
   let(:credentials) { journalist.create_new_auth_token}
   let(:headers) {{ HTTP_ACCEPT: "application/json" }.merge!(credentials)}
-  let(:error_post) {post '/v1/articles', params: {
-                                                  title: 'Which drugs can kill you?',
-                                                  content: 'Drugs are bad. ' * 1000,
-                                                  journalist: journalist,
-                                                  image: image
-                                                  },
-                                                headers: headers}
   let(:image) do
     [{
       type: 'application/jpg',
@@ -44,10 +37,10 @@ RSpec.describe 'Can create article with attributes' do
 
     before do
       post '/v1/articles', params: {
-        title: "Wh",
-        content: "Oh",
-        image: image
-      },
+                                    title: "Wh",
+                                    content: "Oh",
+                                    image: image
+                                  },
       headers: headers
     end
 
@@ -63,13 +56,20 @@ RSpec.describe 'Can create article with attributes' do
   end
 
   describe 'can not post article successfully when exceeding 10.000 characters' do
+    before do
+      post '/v1/articles', params: {
+                                    title: 'Which drugs can kill you?',
+                                    content: 'Drugs are bad. ' * 1000,
+                                    journalist: journalist,
+                                    image: image
+                                    },
+      headers: headers
+    end
     it 'returns 400 response' do
-      error_post
       expect(response.status).to eq 400
     end
 
     it 'returns an error message if max content length is exceeded' do
-      error_post
       expect(response_json['error_message']).to eq 'Content is too long (maximum is 10000 characters)'
     end 
   end
