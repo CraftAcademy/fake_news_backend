@@ -12,11 +12,14 @@ RSpec.describe 'Can create article with attributes' do
   end
   
   describe "can post article successfully" do
+    let(:category) {FactoryBot.create(:category)}
 
     before do
       post '/v1/articles', params: {
         title: "Which drugs can kill you?",
         content: "Oh it is all of them!",
+        category_id: category.id,
+        category: category.name,
         journalist: journalist,
         image: image
       },
@@ -24,6 +27,9 @@ RSpec.describe 'Can create article with attributes' do
     end
 
     it "returns 200 response" do
+      
+      # binding.pry
+      
       expect(response.status).to eq 200
     end
     
@@ -51,7 +57,7 @@ RSpec.describe 'Can create article with attributes' do
 
     it "returns an error message when title and content is incomplete" do
       article = Article.find_by(title: response.request.params['title'])
-      expect(response_json['error_message']).to eq 'Title is too short (minimum is 3 characters) and Content is too short (minimum is 10 characters)'
+      expect(response_json['error_message']).to eq 'Title is too short (minimum is 3 characters), Content is too short (minimum is 10 characters), and Category must exist'
     end
   end
 end

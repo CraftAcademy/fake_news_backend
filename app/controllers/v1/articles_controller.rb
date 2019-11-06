@@ -21,6 +21,9 @@ class V1::ArticlesController < ApplicationController
   end
 
   def create
+    
+    # binding.pry
+    
     authorize Article.create
     article = Article.create(article_params.merge!(journalist: current_user))
     
