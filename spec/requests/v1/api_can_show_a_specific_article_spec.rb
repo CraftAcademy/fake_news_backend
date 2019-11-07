@@ -12,6 +12,9 @@ RSpec.describe 'Return the content of a specific article' do
     end
 
     it 'Article has title' do
+      
+      # binding.pry
+      
       expect(response_json['title']).to eq Article.first.title
     end
 
