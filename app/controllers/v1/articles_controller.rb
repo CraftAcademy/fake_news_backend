@@ -12,7 +12,7 @@ class V1::ArticlesController < ApplicationController
   end
 
   def show
-    if current_user.role == 'subscriber' || 'journalist'
+    if (current_user.role == 'subscriber') || (current_user.role == 'journalist')
       if Article.exists?(id:params[:id])
         article =  Article.find(params[:id])
         render json: article, serializer: Articles::IndexSerializer
@@ -27,7 +27,6 @@ class V1::ArticlesController < ApplicationController
   def create
     authorize Article.create
     article = Article.create(article_params.merge!(journalist: current_user))
-    
     
     if article.persisted? && attach_image(article)
       render json: { message: 'Article was successfully created' }
