@@ -1,4 +1,6 @@
-users = User.create(email: 'user@mail.com', password: 'password')
+User.destroy_all
+
+user = User.create(email: 'user@mail.com', encrypted_password: 'password', role: 'user')
 journalist = User.create(email: 'journalist@mail.com', password: 'password', role: 'journalist')
 subscriber = User.create(email: 'subscriber@mail.com', password: 'password', role: 'subscriber')
 
@@ -10,61 +12,61 @@ category_5 = Category.create( name: 'Lifestyle')
 category_6 = Category.create( name: 'Leisure')
 
 2.times do
-  Article.create(
+  article = Article.create(
     title: Faker::Book.title,
     content: Faker::Movies::HitchhikersGuideToTheGalaxy.quote,
     journalist_id: journalist.id,
     category: category_1,
-    image: Faker::LoremFlickr.image
   )
+  article.image.attach(io: File.open('spec/fixtures/dummy-img-1.png'), filename: 'dummy-img-1.png')
 end
 
 2.times do
-  Article.create(
+  article = Article.create(
     title: Faker::Book.title,
     content: Faker::Movies::HitchhikersGuideToTheGalaxy.quote,
     journalist_id: journalist.id,
     category: category_2,
-    image: Faker::LoremFlickr.image
   )
+  article.image.attach(io: File.open('spec/fixtures/dummy-img-2.png'), filename: 'dummy-img-2.png')
 end
 
 2.times do
-  Article.create(
+  article = Article.create(
     title: Faker::Book.title,
     content: Faker::Movies::HitchhikersGuideToTheGalaxy.quote,
     journalist_id: journalist.id,
     category: category_3,
-    image: Faker::LoremFlickr.image,
   )
+  article.image.attach(io: File.open('spec/fixtures/dummy-img-3.png'), filename: 'dummy-img-3.png')
 end
 
 2.times do
-  Article.create(
+  article = Article.create(
     title: Faker::Book.title,
     content: Faker::Movies::HitchhikersGuideToTheGalaxy.quote,
     journalist_id: journalist.id,
     category: category_4,
-    image: Faker::LoremFlickr.image
   )
+  article.image.attach(io: File.open('spec/fixtures/dummy-img-4.png'), filename: 'dummy-img-4.png')
 end
 
 2.times do
-  Article.create(
+  article = Article.create(
     title: Faker::Book.title,
     content: Faker::Movies::HitchhikersGuideToTheGalaxy.quote,
     journalist_id: journalist.id,
     category: category_5,
-    image: Faker::LoremFlickr.image
   )
+  article.image.attach(io: File.open('spec/fixtures/dummy-img-5.png'), filename: 'dummy-img-5.png')
 end
 
 2.times do
-  Article.create(
+  article = Article.create(
     title: Faker::Book.title,
     content: Faker::Movies::HitchhikersGuideToTheGalaxy.quote,
     journalist_id: journalist.id,
     category: category_6,
-    image: Faker::LoremFlickr.image
   )
+  article.image.attach(io: File.open('spec/fixtures/dummy-img-6.png'), filename: 'dummy-img-6.png')
 end

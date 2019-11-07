@@ -8,4 +8,10 @@ RSpec.describe Category, type: :model do
   describe 'Validation' do
     it { is_expected.to validate_presence_of :name }
   end
+
+  describe 'Factory' do
+    it 'should have valid Factory' do
+      expect(create(:category)).to be_valid
+    end
+  end
 end
