@@ -20,16 +20,14 @@ RSpec.describe 'Can create article with attributes' do
         title: "Which drugs can kill you?",
         content: "Oh it is all of them!",
         category: category.name,
+        content: "Oh it is all of them! " * 20,
         journalist: journalist,
         image: image
       },
       headers: headers
     end
 
-    it "returns 200 response" do
-      
-      # binding.pry
-      
+    it "returns 200 response" do  
       expect(response.status).to eq 200
     end
     
@@ -39,14 +37,14 @@ RSpec.describe 'Can create article with attributes' do
     end
   end
 
-  describe "cannot post article successfully with incomplete information" do
+  describe "can not post article successfully with incomplete information" do
 
     before do
       post '/v1/articles', params: {
-        title: "Wh",
-        content: "Oh",
-        image: image
-      },
+                                    title: "Wh",
+                                    content: "Oh",
+                                    image: image
+                                  },
       headers: headers
     end
 
@@ -59,5 +57,24 @@ RSpec.describe 'Can create article with attributes' do
       article = Article.find_by(title: response.request.params['title'])
       expect(response_json['error_message']).to eq 'Title is too short (minimum is 3 characters), Content is too short (minimum is 10 characters), and Category must exist'
     end
+  end
+
+  describe 'can not post article successfully when exceeding 10.000 characters' do
+    before do
+      post '/v1/articles', params: {
+                                    title: 'Which drugs can kill you?',
+                                    content: 'Drugs are bad. ' * 1000,
+                                    journalist: journalist,
+                                    image: image
+                                    },
+      headers: headers
+    end
+    it 'returns 400 response' do
+      expect(response.status).to eq 400
+    end
+
+    it 'returns an error message if max content length is exceeded' do
+      expect(response_json['error_message']).to eq 'Content is too long (maximum is 10000 characters) and Category must exist'
+    end 
   end
 end
