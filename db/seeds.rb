@@ -11,7 +11,7 @@ category_4 = Category.create( name: 'Economics')
 category_5 = Category.create( name: 'Lifestyle')
 category_6 = Category.create( name: 'Leisure')
 
-2.times do
+3.times do
   article = Article.create(
     title: Faker::Book.title,
     content: Faker::Movies::HitchhikersGuideToTheGalaxy.quote,
@@ -21,7 +21,7 @@ category_6 = Category.create( name: 'Leisure')
   article.image.attach(io: File.open('spec/fixtures/dummy-img-1.png'), filename: 'dummy-img-1.png')
 end
 
-2.times do
+3.times do
   article = Article.create(
     title: Faker::Book.title,
     content: Faker::Movies::HitchhikersGuideToTheGalaxy.quote,
@@ -31,7 +31,7 @@ end
   article.image.attach(io: File.open('spec/fixtures/dummy-img-2.png'), filename: 'dummy-img-2.png')
 end
 
-2.times do
+3.times do
   article = Article.create(
     title: Faker::Book.title,
     content: Faker::Movies::HitchhikersGuideToTheGalaxy.quote,
@@ -41,7 +41,7 @@ end
   article.image.attach(io: File.open('spec/fixtures/dummy-img-3.png'), filename: 'dummy-img-3.png')
 end
 
-2.times do
+3.times do
   article = Article.create(
     title: Faker::Book.title,
     content: Faker::Movies::HitchhikersGuideToTheGalaxy.quote,
@@ -51,7 +51,7 @@ end
   article.image.attach(io: File.open('spec/fixtures/dummy-img-4.png'), filename: 'dummy-img-4.png')
 end
 
-2.times do
+3.times do
   article = Article.create(
     title: Faker::Book.title,
     content: Faker::Movies::HitchhikersGuideToTheGalaxy.quote,
@@ -61,7 +61,7 @@ end
   article.image.attach(io: File.open('spec/fixtures/dummy-img-5.png'), filename: 'dummy-img-5.png')
 end
 
-2.times do
+3.times do
   article = Article.create(
     title: Faker::Book.title,
     content: Faker::Movies::HitchhikersGuideToTheGalaxy.quote,
