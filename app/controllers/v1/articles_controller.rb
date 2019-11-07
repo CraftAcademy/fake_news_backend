@@ -21,14 +21,10 @@ class V1::ArticlesController < ApplicationController
   end
 
   def create
-    
-
-    
     authorize Article.create
     category = Category.find_by(name: params['category'])
     
     article = Article.create(article_params.merge!(journalist: current_user, category: category))
-    
     
     if article.persisted? && attach_image(article)
       render json: { message: 'Article was successfully created' }

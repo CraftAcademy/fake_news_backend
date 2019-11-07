@@ -13,7 +13,6 @@ RSpec.describe 'Can create article with attributes' do
   end
   
   describe "can post article successfully" do
-    
 
     before do
       post '/v1/articles', params: {
