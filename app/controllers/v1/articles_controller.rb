@@ -12,11 +12,15 @@ class V1::ArticlesController < ApplicationController
   end
 
   def show
-    if Article.exists?(id: params[:id])
-      article = Article.find(params[:id])
-      render json: article, serializer: Articles::IndexSerializer
+    if (current_user.role == 'subscriber') || (current_user.role == 'journalist')
+      if Article.exists?(id:params[:id])
+        article =  Article.find(params[:id])
+        render json: article, serializer: Articles::IndexSerializer
+      else
+        render_error_message("Unavailable content", 401)
+      end
     else
-      render_error_message("Unavailable content", 401)
+      render_error_message('You need to become a Subscriber to view this article', 401)
     end
   end
 
