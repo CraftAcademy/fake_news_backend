@@ -1,6 +1,6 @@
 User.destroy_all
 
-user = User.create(email: 'user@mail.com', encrypted_password: 'password', role: 'user')
+user = User.create(email: 'user@mail.com', password: 'password', role: 'user')
 journalist = User.create(email: 'journalist@mail.com', password: 'password', role: 'journalist')
 subscriber = User.create(email: 'subscriber@mail.com', password: 'password', role: 'subscriber')
 
