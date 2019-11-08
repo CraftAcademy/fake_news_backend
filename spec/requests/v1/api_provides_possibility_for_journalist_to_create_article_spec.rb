@@ -1,5 +1,6 @@
 RSpec.describe 'Can create article with attributes' do
   let(:journalist) { create(:user, role: 'journalist') }
+  let(:category) { create(:category) }
   let(:credentials) { journalist.create_new_auth_token}
   let(:headers) {{ HTTP_ACCEPT: "application/json" }.merge!(credentials)}
   let(:image) do
@@ -16,6 +17,8 @@ RSpec.describe 'Can create article with attributes' do
     before do
       post '/v1/articles', params: {
         title: "Which drugs can kill you?",
+        content: "Oh it is all of them!",
+        category: category.name,
         content: "Oh it is all of them! " * 20,
         journalist: journalist,
         image: image
@@ -23,7 +26,7 @@ RSpec.describe 'Can create article with attributes' do
       headers: headers
     end
 
-    it "returns 200 response" do
+    it "returns 200 response" do  
       expect(response.status).to eq 200
     end
     
@@ -51,7 +54,7 @@ RSpec.describe 'Can create article with attributes' do
 
     it "returns an error message when title and content is incomplete" do
       article = Article.find_by(title: response.request.params['title'])
-      expect(response_json['error_message']).to eq 'Title is too short (minimum is 3 characters) and Content is too short (minimum is 10 characters)'
+      expect(response_json['error_message']).to eq 'Title is too short (minimum is 3 characters), Content is too short (minimum is 10 characters), and Category must exist'
     end
   end
 
@@ -70,7 +73,7 @@ RSpec.describe 'Can create article with attributes' do
     end
 
     it 'returns an error message if max content length is exceeded' do
-      expect(response_json['error_message']).to eq 'Content is too long (maximum is 10000 characters)'
+      expect(response_json['error_message']).to eq 'Content is too long (maximum is 10000 characters) and Category must exist'
     end 
   end
 end
