@@ -11,7 +11,7 @@ RSpec.describe 'Return the content of a specific article' do
       headers: headers
     end
 
-    it 'Article has title' do
+    it 'Article has title' do      
       expect(response_json['title']).to eq Article.first.title
     end
 
@@ -62,6 +62,26 @@ RSpec.describe 'Return the content of a specific article' do
 
     it 'returns correct error message' do
       expect(response_json["errors"].first).to eq "You need to sign in or sign up before continuing."
+    end
+  end
+
+  describe 'User is unable to access restricted content' do
+    let(:user) { create(:user, role: 'user') }
+    let!(:article) { create(:article) }
+    let(:credentials) { user.create_new_auth_token}
+    let(:headers) {{ HTTP_ACCEPT: "application/json" }.merge!(credentials)}
+
+    before do
+      get "/v1/articles/#{article.id}",
+      headers: headers
+    end
+
+    it 'returns correct HTTP status code' do
+      expect(response.status).to eq 401
+    end
+
+    it 'returns correct error message' do
+      expect(response_json["error_message"]).to eq "You need to become a Subscriber to view this article"
     end
   end
 end
