@@ -1,7 +1,6 @@
 RSpec.describe 'GET catgeories index', type: :request do 
   let(:headers) {{HTTP_ACCEPT: 'application/json'}}
   describe 'lists all categoris' do 
-    #let!(:categories)
     before do
       categories = [
         'Sports',
@@ -20,7 +19,6 @@ RSpec.describe 'GET catgeories index', type: :request do
 
     it 'returns 6 categories' do
       get '/v1/categories', headers: headers
-      binding.pry
       expect(response_json.length).to eq 6
     end
 
