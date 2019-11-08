@@ -65,7 +65,7 @@ RSpec.describe 'Return the content of a specific article' do
     end
   end
 
-  describe 'do something later' do
+  describe 'User is unable to access restricted content' do
     let(:user) { create(:user, role: 'user') }
     let!(:article) { create(:article) }
     let(:credentials) { user.create_new_auth_token}
