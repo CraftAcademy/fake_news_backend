@@ -2,6 +2,7 @@ class Articles::IndexSerializer < ActiveModel::Serializer
   include Rails.application.routes.url_helpers
     
   attributes :id, :title, :content, :image
+  belongs_to :category, serializer: Categories::IndexSerializer
 
   def image
     if Rails.env.test?
