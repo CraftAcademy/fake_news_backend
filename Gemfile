@@ -5,7 +5,7 @@ ruby '2.5.1'
 
 gem 'rails', '~> 6.0.0'
 gem 'pg', '>= 0.18', '< 2.0'
-gem 'puma', '~> 3.11'
+gem 'puma', '~> 4.3'
 gem 'active_model_serializers', '~> 0.10.2'
 gem 'bootsnap', '>= 1.4.2', require: false
 gem 'coveralls', require: false
